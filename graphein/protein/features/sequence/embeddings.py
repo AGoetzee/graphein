@@ -59,6 +59,10 @@ def _load_esm_model(model_name: str = "esm1b_t33_650M_UR50S"):
         *Transformer protein language models are unsupervised structure learners*
         2020 Rao, Roshan M and Meier, Joshua and Sercu, Tom and Ovchinnikov,
         Sergey and Rives, Alexander
+        
+        Zeming Lin et al. 
+        *Evolutionary-scale prediction of atomic-level protein structure with a language model*
+        Science 379,1123-1130 (2023). DOI:10.1126/science.ade2574
 
     Pre-trained models:
     Full Name layers params Dataset Embedding Dim Model URL
@@ -69,6 +73,13 @@ def _load_esm_model(model_name: str = "esm1b_t33_650M_UR50S"):
     esm1_t34_670M_UR100 34 670M UR100 1280 https://dl.fbaipublicfiles.com/fair-esm/models/esm1_t34_670M_UR100.pt
     esm1_t12_85M_UR50S 12 85M UR50/S 768 https://dl.fbaipublicfiles.com/fair-esm/models/esm1_t12_85M_UR50S.pt
     esm1_t6_43M_UR50S 6 43M UR50/S 768 https://dl.fbaipublicfiles.com/fair-esm/models/esm1_t6_43M_UR50S.pt
+    esm2_t48_15B_UR50D 48 15B UR50/D 2021_04 5120 https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t48_15B_UR50D.pt
+    esm2_t36_3B_UR50D 36 3B UR50/D 2021_04 2560 https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t36_3B_UR50D.pt
+    esm2_t33_650M_UR50D 33 650M UR50/D 2021_04 1280 https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t33_650M_UR50D.pt
+    esm2_t30_150M_UR50D 30 150M UR50/D 2021_04 640 https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t30_150M_UR50D.pt
+    esm2_t12_35M_UR50D 12 35M UR50/D 2021_04 480 https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t12_35M_UR50D.pt
+    esm2_t6_8M_UR50D 6 8M UR50/D 2021_04 320 https://dl.fbaipublicfiles.com/fair-esm/models/esm2_t6_8M_UR50D.pt
+    
 
     :param model_name: Name of pre-trained model to load
     :type model_name: str
