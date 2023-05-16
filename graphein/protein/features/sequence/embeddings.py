@@ -75,7 +75,7 @@ def _load_esm_model(model_name: str = "esm1b_t33_650M_UR50S"):
     :return: loaded pre-trained model
     """
 
-    return torch.hub.load("facebookresearch/esm", model_name)
+    return esm.pretrained.load_model_and_alphabet(model_name)
 
 
 def compute_esm_embedding(
