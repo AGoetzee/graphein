@@ -143,7 +143,7 @@ def get_protT5_embeddings(G: nx.Graph) -> nx.Graph:
         
         with torch.no_grad():
             embedding = model.encoder(**encoded_input)
-        embedding = embedding.last_hidden_state.squeeze(0)
+        embedding = embedding.last_hidden_state.squeeze(0).numpy()
         for i, (n, d) in enumerate(subgraph.nodes(data=True)):
             G.nodes[n]["prott5_embedding"] = embedding[i,:]
     
