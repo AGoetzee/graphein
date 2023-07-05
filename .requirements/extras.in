@@ -9,3 +9,4 @@ einops
 foldcomp
 nest_asyncio
 transformers
+sentencepiece
