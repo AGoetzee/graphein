@@ -8,3 +8,4 @@ smilite
 einops
 foldcomp
 nest_asyncio
+transformers
