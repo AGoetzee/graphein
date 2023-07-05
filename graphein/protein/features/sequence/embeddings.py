@@ -94,11 +94,11 @@ def get_protbert_embeddings(G: nx.Graph,
     :rtype: nx.Graph
     """
     
-    from transformers import AutoTokenizer, AutoModel
+    from transformers import BertTokenizer, BertModel
     import re
 
-    tokenizer = AutoModel.from_pretrained(f"Rostlab/{model}", do_lower_case=False )
-    model = AutoTokenizer.from_pretrained(f"Rostlab/{model}")
+    tokenizer = BertTokenizer.from_pretrained('Rostlab/prot_bert', do_lower_case=False )
+    model = BertModel.from_pretrained(f"Rostlab/{model}")
     
     for chain in G.graph["chain_ids"]:
         sequence = G.graph[f"sequence_{chain}"]
@@ -117,6 +117,37 @@ def get_protbert_embeddings(G: nx.Graph,
     
     return G
 
+def get_protT5_embeddings(G: nx.Graph) -> nx.Graph:
+    """
+    Computes protT5 per-residue embedding features over chains in a graph.
+    
+    :param G: ``nx.Graph`` protein structure graph. 
+    :type G: ``nx.Graph``
+    :return: ``nx.Graph`` with protT5 embedding feature added to nodes.
+    :rtype: nx.Graph
+    """
+    
+    from transformers import T5Tokenizer, T5Model
+    import re
+
+    tokenizer = T5Tokenizer.from_pretrained('Rostlab/prot_t5_xl_uniref50', do_lower_case=False )
+    model = T5Model.from_pretrained("Rostlab/prot_t5_xl_uniref50")
+    
+    for chain in G.graph["chain_ids"]:
+        sequence = G.graph[f"sequence_{chain}"]
+        sequence = ' '.join(sequence)
+        sequence = re.sub(r"[UZOB]", "X", sequence)
+        encoded_input = tokenizer(sequence, return_tensors='pt')
+        
+        subgraph = subset_by_node_feature_value(G, "chain_id", chain)
+        
+        with torch.no_grad():
+            embedding = model.encoder(**encoded_input)
+        embedding = embedding.last_hidden_state.squeeze(0)
+        for i, (n, d) in enumerate(subgraph.nodes(data=True)):
+            G.nodes[n]["prott5_embedding"] = embedding[i,:]
+    
+    return G
 
 
 def compute_esm_embedding(
