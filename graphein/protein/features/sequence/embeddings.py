@@ -78,6 +78,47 @@ def _load_esm_model(model_name: str = "esm1b_t33_650M_UR50S"):
     return torch.hub.load("facebookresearch/esm", model_name)
 
 
+def get_protbert_embeddings(G: nx.Graph, 
+                            model: str ='prot_bert') -> nx.Graph: 
+    """
+    Computes protBERT per-residue embedding features over chains in a graph.
+    
+    **Available models**
+    ProtBert-BFD
+
+    :param G: ``nx.Graph`` protein structure graph. 
+    :type G: ``nx.Graph``
+    :param model: Name of pre-trained model to use.
+    :type model: str
+    :return: ``nx.Graph`` with protBERT embedding feature added to nodes.
+    :rtype: nx.Graph
+    """
+    
+    from transformers import AutoTokenizer, AutoModel
+    import re
+
+    tokenizer = AutoModel.from_pretrained(f"Rostlab/{model}", do_lower_case=False )
+    model = AutoTokenizer.from_pretrained(f"Rostlab/{model}")
+    
+    for chain in G.graph["chain_ids"]:
+        sequence = G.graph[f"sequence_{chain}"]
+        sequence = ' '.join(sequence)
+        sequence = re.sub(r"[UZOB]", "X", sequence)
+        encoded_input = tokenizer(sequence, return_tensors='pt')
+        
+        subgraph = subset_by_node_feature_value(G, "chain_id", chain)
+        
+        with torch.no_grad():
+            embedding = model(**encoded_input)
+        embedding = embedding.last_hidden_state[0][1:len(sequence)+1][:].numpy()
+            
+        for i, (n, d) in enumerate(subgraph.nodes(data=True)):
+            G.nodes[n]["protbert_embedding"] = embedding[i]
+    
+    return G
+
+
+
 def compute_esm_embedding(
     sequence: str,
     representation: str,
