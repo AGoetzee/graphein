@@ -963,12 +963,13 @@ def add_distance_threshold(
     log.info(f"Found: {len(interacting_nodes)} distance edges")
     count = 0
     for a1, a2 in interacting_nodes:
-        n1 = G.graph["pdb_df"].loc[a1, "node_id"]
-        n2 = G.graph["pdb_df"].loc[a2, "node_id"]
-        n1_chain = G.graph["pdb_df"].loc[a1, "chain_id"]
-        n2_chain = G.graph["pdb_df"].loc[a2, "chain_id"]
-        n1_position = G.graph["pdb_df"].loc[a1, "residue_number"]
-        n2_position = G.graph["pdb_df"].loc[a2, "residue_number"]
+        n1 = G.graph["pdb_df"].iloc[a1]["node_id"]
+        n2 = G.graph["pdb_df"].iloc[a2]["node_id"]
+        n1_chain = G.graph["pdb_df"].iloc[a1]["chain_id"]
+        n2_chain = G.graph["pdb_df"].iloc[a2]["chain_id"]
+        n1_position = G.graph["pdb_df"].iloc[a1]["residue_number"]
+        n2_position = G.graph["pdb_df"].iloc[a2]["residue_number"]
+
 
         condition_1 = n1_chain == n2_chain
         condition_2 = (
